@@ -45,6 +45,7 @@ class Menu(models.Model):
 	description 		= models.CharField(max_length=200, default='')
 	precio 					= models.IntegerField(default=0)
 	preparationTime = models.IntegerField(default=0)
+	pictureUrl 			= models.CharField(max_length=200, default='')
 	chef 						= models.ForeignKey(Chef)
 
 	def __unicode__(self):
@@ -56,7 +57,7 @@ class Date(models.Model):
 
 	def __unicode__(self):
 		return "Chef: {} Fecha: {}".format(
-				self.chef,
+				self.chef.name,
 				self.date
 			)
 
