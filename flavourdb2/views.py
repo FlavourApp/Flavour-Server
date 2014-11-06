@@ -3,18 +3,9 @@ from django.http import HttpResponse
 
 import json
 
-from flavourdb2.models import User, Chef, Comuna, Consumer
+from flavourdb2.models import *
+from django.core import serializers
 
-
-# Create your views here.
-
-
-#main view
-#	from all chefs pick foto, nombre, rating,descripcion
-#		filter chefs q llegan a tu comuna
-
-
-#
 def mainView(request):
 
 	idUser = int(request.GET.get('userId', -1))
@@ -75,13 +66,14 @@ def chefs(request):
 	response_data['chefs'] = chef_list
 
 	for chef in allChefs:
-		chef_dict ={}
-		chef_dict['name'] = chef.name
-		chef_dict['lastname'] = chef.lastname
-		chef_dict['email'] = chef.email
-		chef_dict['phone'] = chef.phone
-		chef_dict['pictureUrl'] = chef.pictureUrl
-		chef_dict['description'] = chef.description
+		chef_dict = {}
+		chef_dict['chefId'] 			= chef.pk
+		chef_dict['name'] 				= chef.name
+		chef_dict['lastname'] 		= chef.lastname
+		chef_dict['email'] 				= chef.email
+		chef_dict['phone']		 		= chef.phone
+		chef_dict['pictureUrl'] 	= chef.pictureUrl
+		chef_dict['description'] 	= chef.description
 		comunas = []
 		for comuna in Comuna.objects.filter(chef=chef.pk):
 			comunas.append(comuna.name)
@@ -90,13 +82,15 @@ def chefs(request):
 
 	return HttpResponse(json.dumps(response_data), content_type="application/json")
 
+def dates(request):
+	pk = request.GET['chefId']
+	dates = {"dates": [str(date.date) for date in Date.objects.filter(chef__pk=pk)]}
+	print dates
+	return HttpResponse(json.dumps(dates), content_type="application/json")
+
 def index(request):
 
-
 	allUsers = User.objects.all()
-
-
-	#return HttpResponse("<h1>Hello, world.</h1> You're at the polls index.")
 	response_data = {}
 	user_list = []
 	response_data['users'] = user_list
