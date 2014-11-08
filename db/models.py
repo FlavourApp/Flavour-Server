@@ -6,8 +6,8 @@ class User(models.Model):
 	name 	= models.CharField(max_length=200, default = '')
 	surName = models.CharField(max_length=200, default = '')
 
-class Comuna(models.Model):
-	name 	= models.CharField(max_length=60, default = '')
+class Comuna(models.Model):	
+	name 	= models.CharField(max_length=60, default = '', primary_key=True)
 
 	def __unicode__(self):
 		return "{}".format(self.name)

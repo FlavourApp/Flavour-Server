@@ -6,6 +6,9 @@ import json
 from db.models import *
 from django.core import serializers
 
+JSONserializer = serializers.get_serializer('json')
+json_serializer = JSONserializer()
+
 def mainView(request):
 
 	idUser = int(request.GET.get('userId', -1))
@@ -13,8 +16,6 @@ def mainView(request):
 		pass #TODO return something client understands
 	comuna = Consumer.objects.filter(pk=idUser)[0].comuna
 	allChefs = Chef.objects.filter(comunas__name=comuna)
-
-	print allChefs
 
 	response_data = {}
 	chef_list = []
@@ -28,11 +29,13 @@ def mainView(request):
 		chef_dict['description'] = chef.description
 		chef_list.append(chef_dict)
 
-	return HttpResponse(json.dumps(response_data), content_type="application/json")
+	return HttpResponse(json.dumps(
+			response_data), 
+			content_type="application/json"
+		)
 
 def addConsumer(request):
 
-	print request.POST
 	name = request.POST.get('name')
 	lastname = request.POST.get('lastname')
 	address = request.POST.get('address')
@@ -40,7 +43,6 @@ def addConsumer(request):
 	FBID = request.POST.get('FBID')
 	email = request.POST.get('email')
 	comuna = request.POST.get('comuna')
-	print comuna
 	comuna = Comuna.objects.filter(name=comuna)[0]
 	
 	consumer = Consumer(
@@ -58,34 +60,15 @@ def addConsumer(request):
 	return HttpResponse("ok")
 
 def chefs(request):
-
-	allChefs = Chef.objects.all()
-
-	response_data = {}
-	chef_list = []
-	response_data['chefs'] = chef_list
-
-	for chef in allChefs:
-		chef_dict = {}
-		chef_dict['chefId'] 			= chef.pk
-		chef_dict['name'] 				= chef.name
-		chef_dict['lastname'] 		= chef.lastname
-		chef_dict['email'] 				= chef.email
-		chef_dict['phone']		 		= chef.phone
-		chef_dict['pictureUrl'] 	= chef.pictureUrl
-		chef_dict['description'] 	= chef.description
-		comunas = []
-		for comuna in Comuna.objects.filter(chef=chef.pk):
-			comunas.append(comuna.name)
-		chef_dict['comunas'] = comunas  
-		chef_list.append(chef_dict)
-
-	return HttpResponse(json.dumps(response_data), content_type="application/json")
+	return HttpResponse(
+			json_serializer.serialize(Chef.objects.all()), 
+			content_type="application/json"
+		)
 
 def dates(request):
 	pk = request.GET['chefId']
+
 	dates = {"dates": [str(date.date) for date in Date.objects.filter(chef__pk=pk)]}
-	print dates
 	return HttpResponse(json.dumps(dates), content_type="application/json")
 
 def index(request):
