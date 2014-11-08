@@ -3,7 +3,7 @@ from django.http import HttpResponse
 
 import json
 
-from flavourdb2.models import *
+from db.models import *
 from django.core import serializers
 
 def mainView(request):

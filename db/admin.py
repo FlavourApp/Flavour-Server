@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from flavourdb2.models import User, Chef, Comuna, Menu, ChefBioFoodImage, MenuImage, Consumer, Date
+from db.models import User, Chef, Comuna, Menu, ChefBioFoodImage, MenuImage, Consumer, Date
 
 admin.site.register(User)
 admin.site.register(Chef)
