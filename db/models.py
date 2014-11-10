@@ -13,23 +13,28 @@ class Comuna(models.Model):
 		return "{}".format(self.name)
 
 class Chef(models.Model):
-	name 				= models.CharField(max_length=60, default = '')
-	lastname 		= models.CharField(max_length=60, default = '')
-	email 			= models.EmailField(max_length=60)
-	phone 			= models.CharField(max_length=12)
-	pictureUrl 	= models.URLField(max_length=200)
+	name 		= models.CharField(max_length=60, default = '')
+	lastname 	= models.CharField(max_length=60, default = '')
+	email 		= models.EmailField(max_length=60)
+	phone 		= models.CharField(max_length=12)
+	picture 	= models.ImageField(default = '')
 	description = models.CharField(max_length=200, default='')
-	comunas 		= models.ManyToManyField(Comuna)
+	comunas 	= models.ManyToManyField(Comuna)
+
+	def image_tag(self):
+		return u'<image src="%s" />' % self.picture.url
+		image_tag.short_description = 'Image'
+		image_tag.allow_tags = True
 
 	def __unicode__(self):
 		return "{} {} | {}".format(self.name, self.lastname, self.description)
 
 class Consumer(models.Model):
-	name 			= models.CharField(max_length=60, default = '')
+	name 		= models.CharField(max_length=60, default = '')
 	lastname 	= models.CharField(max_length=60, default = '')
 	address 	= models.CharField(max_length=60, default = '')
 	phone 		= models.CharField(max_length=12, default = '')
-	FBID 			= models.CharField(max_length=60, default = '', blank=True)
+	FBID 		= models.CharField(max_length=60, default = '', blank=True)
 	email 		= models.EmailField(max_length=60, default = '')
 	comuna 		= models.ForeignKey(Comuna)	
 
@@ -41,19 +46,25 @@ class ChefBioFoodImage(models.Model):
 		return "{}".format(self.url)
 
 class Menu(models.Model):
-	name 						= models.CharField(max_length=200, default='')
-	description 		= models.CharField(max_length=200, default='')
-	precio 					= models.IntegerField(default=0)
+	name 			= models.CharField(max_length=200, default='')
+	description 	= models.CharField(max_length=200, default='')
+	precio 			= models.IntegerField(default=0)
 	preparationTime = models.IntegerField(default=0)
-	pictureUrl 			= models.CharField(max_length=200, default='')
-	chef 						= models.ForeignKey(Chef)
+	pictureUrl 		= models.CharField(max_length=200, default='')
+	chef 			= models.ForeignKey(Chef)
 
 	def __unicode__(self):
 		return "${} | {}".format(self.precio, self.description)
 
+class Reserva(models.Model):
+	chef 		= models.ForeignKey(Chef)
+	usermail	= models.EmailField(max_length=60, default = '')
+	menu 		= models.ForeignKey(Menu)
+	date 		= models.DateField()
+
 class Date(models.Model):
-	chef 	= models.ForeignKey(Chef) 
-	date 	= models.DateField()
+	chef = models.ForeignKey(Chef) 
+	date = models.DateField()
 
 	def __unicode__(self):
 		return "Chef: {} Fecha: {}".format(
