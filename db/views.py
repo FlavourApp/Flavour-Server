@@ -1,12 +1,10 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
 from django.http import HttpResponseRedirect
 from django.core import serializers
 from forms import *
 from db.models import *
-
-import json
-json_serializer = serializers.get_serializer('json')()
+import data_views
 
 def home(request):
 	if request.method == 'POST':
@@ -29,16 +27,19 @@ def reserva(request):
 		form = ReservaForm()
 	return render(request, 'reserva.html', {'form':form})
 
-def chefs(request):
-	return HttpResponse(
-			json_serializer.serialize(Chef.objects.all()), 
-			content_type="application/json"
-		)
+def menus(request, chefid):
 
-def dates(request):
-	pk = request.GET['chefId']
-
-	dates = {
-	"dates": [str(date.date) for date in Date.objects.filter(chef__pk=pk)]
+	req = HttpRequest()
+	req.method = 'GET'
+	req.GET = {
+		'chefId' :  chefid,
 	}
-	return HttpResponse(json.dumps(dates), content_type="application/json")
+	resp = data_views.menus(req)
+
+	menus = Menu.objects.filter(chef__pk=chefid)
+
+	return render(
+			request, 
+			'menus.html', 
+			{'menus':menus}
+		)

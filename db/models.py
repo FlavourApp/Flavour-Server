@@ -50,7 +50,7 @@ class Menu(models.Model):
 	description 	= models.CharField(max_length=200, default='')
 	precio 			= models.IntegerField(default=0)
 	preparationTime = models.IntegerField(default=0)
-	pictureUrl 		= models.CharField(max_length=200, default='')
+	picture 		= models.ImageField(max_length=200, default='')
 	chef 			= models.ForeignKey(Chef)
 
 	def __unicode__(self):

@@ -28,3 +28,14 @@ def dates(request):
 		return HttpResponse(json.dumps(dates), content_type="application/json")
 	else:
 		return HttpResponse('Error')
+
+def menus(request):
+	if request.method == 'GET':
+		pk = request.GET['chefId']
+		menus = Menu.objects.filter(chef__pk=pk)
+		return HttpResponse(
+				json_serializer.serialize(menus), 
+				content_type="application/json"
+			)
+	else:
+		return HttpResponse('Error')
