@@ -3,9 +3,11 @@ from django.contrib import admin
 # Register your models here.
 from db.models import User, Chef, Comuna, Menu, ChefBioFoodImage, MenuImage, Consumer, Date, Reserva
 
+
+
 class ChefAdmin(admin.ModelAdmin):
 	readonly_fields = ('image_tag',)
-	fields = ['name', 'lastname', 'email', 'phone', 'picture', 'description', 'comunas','image_tag']
+	fields = ['name', 'lastname', 'email', 'phone', 'picture', 'description', 'bio', 'comunas','image_tag']
 
 admin.site.register(User)
 admin.site.register(Chef, ChefAdmin)

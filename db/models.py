@@ -13,13 +13,15 @@ class Comuna(models.Model):
 		return "{}".format(self.name)
 
 class Chef(models.Model):
-	name 				= models.CharField(max_length=60, default = '')
-	lastname 		= models.CharField(max_length=60, default = '')
-	email 			= models.EmailField(max_length=60)
-	phone 			= models.CharField(max_length=12)
-	picture 		= models.ImageField(default = '')
+	name 		= models.CharField(max_length=60, default = '')
+	lastname 	= models.CharField(max_length=60, default = '')
+	email 		= models.EmailField(max_length=60)
+	phone 		= models.CharField(max_length=12)
+	picture 	= models.ImageField(default = '')
 	description = models.CharField(max_length=200, default='')
-	comunas 		= models.ManyToManyField(Comuna)
+	comunas 	= models.ManyToManyField(Comuna)
+	bio 		= models.CharField(default= '',max_length=255)
+
 
 	def image_tag(self):
 		return u'<image src="%s" />' % self.picture.url
@@ -30,11 +32,11 @@ class Chef(models.Model):
 		return "{} {} | {}".format(self.name, self.lastname, self.description)
 
 class Consumer(models.Model):
-	name 			= models.CharField(max_length=60, default = '')
+	name 		= models.CharField(max_length=60, default = '')
 	lastname 	= models.CharField(max_length=60, default = '')
 	address 	= models.CharField(max_length=60, default = '')
 	phone 		= models.CharField(max_length=12, default = '')
-	FBID 			= models.CharField(max_length=60, default = '', blank=True)
+	FBID 		= models.CharField(max_length=60, default = '', blank=True)
 	email 		= models.EmailField(max_length=60, default = '')
 	comuna 		= models.ForeignKey(Comuna)	
 
