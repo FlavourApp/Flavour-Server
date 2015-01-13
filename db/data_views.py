@@ -8,34 +8,32 @@ from db.models import *
 import json
 json_serializer = serializers.get_serializer('json')()
 
+@require_GET
 def chefs(request):
-	if request.method == 'GET':
-		comuna = request.GET['comuna']
-
-		chef_list = Chef.objects.filter(comunas__name__contains=comuna)
-
-		return HttpResponse(
-				json_serializer.serialize(chef_list), 
-				content_type="application/json"
-			)
-
+	comuna = request.GET['comuna']
+	chef_list = Chef.objects.filter(comunas__name__contains=comuna)
+	return HttpResponse(
+			json_serializer.serialize(chef_list), 
+			content_type="application/json"
+		)
+@require_GET
 def dates(request):
-	if request.method == 'GET':
-		pk = request.GET['chefId']
-		dates = {
-			"dates": [str(date.date) for date in Date.objects.filter(chef__pk=pk)]
-		}
-		return HttpResponse(json.dumps(dates), content_type="application/json")
-	else:
-		return HttpResponse('Error')
+	pk = request.GET['chefId']
+	dates = {
+		"dates": [str(date.date) for date in Date.objects.filter(chef__pk=pk)]
+	}
+	return HttpResponse(json.dumps(dates), content_type="application/json")
 
+@require_GET
+def reservations(request):
+	reserva = Reserva.objects.get(pk=request.GET['pk'])
+	return HttpResponse(json.dumps(reserva), content_type="application/json")
+
+@require_GET
 def menus(request):
-	if request.method == 'GET':
-		pk = request.GET['chefId']
-		menus = Menu.objects.filter(chef__pk=pk)
-		return HttpResponse(
-				json_serializer.serialize(menus), 
-				content_type="application/json"
-			)
-	else:
-		return HttpResponse('Error')
+	pk = request.GET['chefId']
+	menus = Menu.objects.filter(chef__pk=pk)
+	return HttpResponse(
+			json_serializer.serialize(menus), 
+			content_type="application/json"
+		)

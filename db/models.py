@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 
 class User(models.Model):
-	name 		= models.CharField(max_length=200, default = '')
+	name 	= models.CharField(max_length=200, default = '')
 	surName = models.CharField(max_length=200, default = '')
 
 class Comuna(models.Model):	
@@ -41,28 +41,34 @@ class Consumer(models.Model):
 	comuna 		= models.ForeignKey(Comuna)	
 
 class ChefBioFoodImage(models.Model):
-	url 		= models.URLField(max_length=200)
-	chef 		= models.ForeignKey(Chef)
+	url 	= models.URLField(max_length=200)
+	chef 	= models.ForeignKey(Chef)
 
 	def __unicode__(self):
 		return "{}".format(self.url)
 
 class Menu(models.Model):
-	name 						= models.CharField(max_length=200, default='')
-	description 		= models.CharField(max_length=200, default='')
-	precio 					= models.IntegerField(default=0)
+	name 			= models.CharField(max_length=200, default='')
+	description 	= models.CharField(max_length=200, default='')
+	precio 			= models.IntegerField(default=0)
 	preparationTime = models.IntegerField(default=0)
-	picture 				= models.ImageField(max_length=200, default='')
-	chef 						= models.ForeignKey(Chef)
+	picture 		= models.ImageField(max_length=200, default='')
+	chef 			= models.ForeignKey(Chef)
 
 	def __unicode__(self):
 		return "${} | {}".format(self.precio, self.description)
 
 class Reserva(models.Model):
-	chef 			= models.ForeignKey(Chef)
-	usermail	= models.EmailField(max_length=60, default = '')
-	menu 			= models.ForeignKey(Menu)
-	date 			= models.DateField()
+	chef 		= models.ForeignKey(Chef)
+	usermail 	= models.EmailField(max_length=60, default = '')
+	menu 		= models.ForeignKey(Menu)
+	date 		= models.DateField()
+	#campos para khipu y cliente
+	status 		= models.CharField(max_length=200)
+	trans_id 	= models.IntegerField()
+	custom 		= models.CharField(max_length=200)
+	subject 	= models.CharField(max_length=200)
+	amount 		= models.IntegerField()
 
 	def __unicode__(self):
 		return "chef: {}, menu: {}, date: {}".format(
