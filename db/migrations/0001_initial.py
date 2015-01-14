@@ -18,8 +18,9 @@ class Migration(migrations.Migration):
                 ('lastname', models.CharField(default=b'', max_length=60)),
                 ('email', models.EmailField(max_length=60)),
                 ('phone', models.CharField(max_length=12)),
-                ('pictureUrl', models.URLField()),
+                ('picture', models.ImageField(default=b'', upload_to=b'')),
                 ('description', models.CharField(default=b'', max_length=200)),
+                ('bio', models.CharField(default=b'', max_length=255)),
             ],
             options={
             },
@@ -39,8 +40,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Comuna',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', models.CharField(default=b'', max_length=60)),
+                ('name', models.CharField(default=b'', max_length=60, serialize=False, primary_key=True)),
             ],
             options={
             },
@@ -66,7 +66,7 @@ class Migration(migrations.Migration):
             name='Date',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('date', models.DateField()),
+                ('date', models.DateField(default=b'')),
                 ('chef', models.ForeignKey(to='db.Chef')),
             ],
             options={
@@ -81,7 +81,7 @@ class Migration(migrations.Migration):
                 ('description', models.CharField(default=b'', max_length=200)),
                 ('precio', models.IntegerField(default=0)),
                 ('preparationTime', models.IntegerField(default=0)),
-                ('pictureUrl', models.CharField(default=b'', max_length=200)),
+                ('picture', models.ImageField(default=b'', max_length=200, upload_to=b'')),
                 ('chef', models.ForeignKey(to='db.Chef')),
             ],
             options={
@@ -93,6 +93,23 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('url', models.URLField()),
+                ('menu', models.ForeignKey(to='db.Menu')),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Reserva',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('usermail', models.CharField(max_length=60)),
+                ('date', models.DateField()),
+                ('status', models.CharField(max_length=200)),
+                ('custom', models.CharField(max_length=200)),
+                ('subject', models.CharField(max_length=200)),
+                ('amount', models.IntegerField()),
+                ('chef', models.ForeignKey(to='db.Chef')),
                 ('menu', models.ForeignKey(to='db.Menu')),
             ],
             options={

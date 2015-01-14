@@ -1,4 +1,5 @@
 from django.db import models
+import time
 
 # Create your models here.
 
@@ -58,32 +59,29 @@ class Menu(models.Model):
 	def __unicode__(self):
 		return "${} | {}".format(self.precio, self.description)
 
-class Reserva(models.Model):
-	chef 		= models.ForeignKey(Chef)
-	usermail 	= models.EmailField(max_length=60, default = '')
-	menu 		= models.ForeignKey(Menu)
-	date 		= models.DateField()
-	#campos para khipu y cliente
-	status 		= models.CharField(max_length=200)
-	trans_id 	= models.IntegerField()
-	custom 		= models.CharField(max_length=200)
-	subject 	= models.CharField(max_length=200)
-	amount 		= models.IntegerField()
-
-	def __unicode__(self):
-		return "chef: {}, menu: {}, date: {}".format(
-				self.chef.name, self.menu.name, self.date
-			)
-
 class Date(models.Model):
 	chef = models.ForeignKey(Chef) 
-	date = models.DateField()
+	date = models.DateField(default = '')
 
 	def __unicode__(self):
 		return "Chef: {} Fecha: {}".format(
 				self.chef.name,
 				self.date
 			)
+
+class Reserva(models.Model):
+	chef 		= models.ForeignKey(Chef)
+	usermail 	= models.CharField(max_length=60)
+	menu 		= models.ForeignKey(Menu)
+	date 		= models.DateField()
+	status 		= models.CharField(max_length=60)
+
+	def __unicode__(self):
+		return "chef: {}, menu: {}, date: {}".format(
+				self.chef.name, self.menu.name, self.date
+			)
+
+
 
 class MenuImage(models.Model):
 	url 	= models.URLField(max_length=200)

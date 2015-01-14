@@ -4,14 +4,18 @@ from django.http import HttpResponseRedirect
 from django.core import serializers
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
+from django.views.decorators.http import *
 from forms import *
 from db.models import *
 import data_views
 import requests
 import hashlib
 import hmac
+import json
+json_serializer = serializers.get_serializer('json')()
 
-my_reciever_id = '***'
+my_reciever_id = '23003'
+secret = '9fa9cc61f7455f4ba3345bd7719ebe5cc9afc0e5' 
 
 @require_POST
 def home(request):
@@ -24,51 +28,64 @@ def home(request):
 	form = ComunaForm()
 	return render(request, 'home.html', {'form':form})
 
+@csrf_exempt
 @require_POST
 def pay_khipu(request):
 	#parametros POST: chefID, menu, date, usermail
+	chefId 		= request.POST.get('chefId')
+	menuId 		= request.POST.get('menuId')
+	dateId 		= request.POST.get('dateId')
+	usermail 	= request.POST.get('payer_email')
+	body 		= Menu.objects.get(pk=menuId).description
 
 	reserva = Reserva(
-			chef 		= '',
-			usermail 	= '',
-			menu 		= '',
-			date 		= '',
+			chef 		= Chef.objects.get(pk=chefId),
+			usermail 	= usermail,
+			menu 		= Menu.objects.get(pk=menuId),
+			date 		= '2014-10-10',
+			status 		= 'unverified'
 		)
 
-	reserva.status 		= 'Unverified'
-	reserva.trans_id 	= transaction_id
+	#reserva.status 		= 'Unverified'
+	reserva.save()
 
 	#hacemos llamada a khipu
 	url = 'https://khipu.com/api/1.3/createPaymentURL'
 	#parametros
 	parameters = [
-		('receiver_id' 		= my_reciever_id),
-		('subject' 			= 'subject'),
-		('body' 			= 'body'),
-		('amount' 			= 333),
-		('payer_email' 		= 'a@b.com'),
-		('bank_id' 			= 333),
-		('expires_date' 	= '3/3/3'),
-		('transaction_id' 	= 333),
-		('custom' 			= 'custom'),
-		('notify_url' 		= 'url.notify.com'),
-		('return_url' 		= 'url.com'),
-		('cancel_url' 		= 'url.com'),
-		('picture_url' 		= 'url.com'),
+		('receiver_id' 		, my_reciever_id),
+		('subject' 			, 'Compra en Flavour'),
+		('body' 			, str(body)),
+		('amount' 			, str(reserva.menu.precio)), 
+		('payer_email' 		, usermail),
+		('bank_id' 			, ''),
+		('expires_date' 	, ''),
+		('transaction_id' 	, str(reserva.pk)),
+		('custom' 			, ''),
+		('notify_url' 		, 'http://186.107.112.246:8001/successfulPayment/'),
+		('return_url' 		, 'flavour://success.flavour.com'),
+		('cancel_url' 		, 'flavour://failure.flavour.com'),
+		('picture_url' 		, ''),
 	]
 	#concatenamos para el requisito del parametro hash
 	concatenated_list = [key + "=" + value for key,value in parameters]
 	concatenated = "&".join(concatenated_list)
 	#calculamos el parametro hash
-	secret = '***'
-	hash_parameter = hashed = hmac.new(secret, msg=concatenated, digestmod=hashlib.sha256).digest()
+	hash_parameter = hmac.new(secret, msg=concatenated, digestmod=hashlib.sha256).hexdigest()
 	#mandamos request a khipu
+	parameters.append(('hash', hash_parameter))
 	data = dict(parameters)
 	req = requests.post(url, data=data)
 	if req.text:
 		#enviamos el parametro mobile-url al cliente
 		mobile_url =req.json()['mobile-url']
+		return HttpResponse(
+			json.dumps(
+				{'mobile-url' : mobile_url}
+			), 
+			content_type="application/json")
 
+@csrf_exempt
 @require_POST
 def sucsessful_payment(request):
 	#debemos verificar que es khipu quien notifica de un pago exitoso
@@ -78,41 +95,52 @@ def sucsessful_payment(request):
 					'subject', 'amount', 'currency', 'transaction_id', 
 					'payer_email', 'custom'
 				]
-	data = {
-		param : request.POST[param]
-	} for param in parameters
+	data = {}
+
+	for param in parameters:
+		data[param] = request.POST[param]
+	 	
 
 	data['notification_signature'] = request.POST['notification_signature']
 	req = requests.post(verification_url, data=data)
-	if req.test == 'VERIFIED' and receiver_id=my_reciever_id:
-		#una vez verificado procedemos a realizar la reserva en el sistema
-		try:
-			reserva = Reserva.objects.get(
-				trans_id 	= request.POST['transaction_id'], 
-				custom		= request.POST['custom'], 
-				subject 	= request.POST['subject'], 
-				amount 		= request.POST['amount']
+	reserva = Reserva.objects.get(
+				pk 	= request.POST['transaction_id'],
 			)
-			reserva.status = 'verified'
+	if req.text == 'VERIFIED' and reserva.status == 'unverified' and request.POST['receiver_id'] == my_reciever_id:
+		#una vez verificado procedemos a realizar la reserva en el sistema
+					
+		reserva.status = 'verified'
 
-			msg = "Hola, muchas gracias por usar FlavourApp.\n"
-			msg += "Los detalles de su pedido son:\nChef: {}\nMenu: {}\nPrecio: {}\nFecha: {}".format(
-					reserva.chef.name + " " + reserva.chef.lastname,
-					reserva.menu.name,
-					'$'+ str(reserva.menu.precio),
-					reserva.date
-				)
+		msg = "Hola, muchas gracias por usar FlavourApp.\n"
+		msg += "Los detalles de su pedido son:\nChef: {}\nMenu: {}\nPrecio: {}\nFecha: {}".format(
+				reserva.chef.name + " " + reserva.chef.lastname,
+				reserva.menu.name,
+				'$'+ str(reserva.menu.precio),
+				reserva.date
+			)
 
 
-			send_mail(
-				'flavourapp', 
-				msg, 
-				'flavourapp@gmail.com',
-    			(reserva.usermail,), 
-    			fail_silently=False
-    		)
-		except Reserva.DoesNotExist:
-			pass
+		send_mail(
+			'flavourapp', 
+			msg, 
+			'flavourapp@gmail.com',
+			(reserva.usermail,), 
+			fail_silently=False
+		)
+
+		return HttpResponse(
+		json.dumps(
+			[]
+		), 
+		content_type="application/json")
+
+		
+
+	return HttpResponse(
+			json.dumps(
+				[]
+			), 
+			content_type="application/json")
 
 
 def menus(request, chefid):

@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.core import serializers
+from django.views.decorators.http import *
 from forms import *
 from db.models import *
 
@@ -18,11 +19,9 @@ def chefs(request):
 		)
 @require_GET
 def dates(request):
-	pk = request.GET['chefId']
-	dates = {
-		"dates": [str(date.date) for date in Date.objects.filter(chef__pk=pk)]
-	}
-	return HttpResponse(json.dumps(dates), content_type="application/json")
+	pk = request.GET['chefId']	
+	dates = Date.objects.filter(chef__pk=pk)
+	return HttpResponse(json_serializer.serialize(dates), content_type="application/json")
 
 @require_GET
 def reservations(request):
