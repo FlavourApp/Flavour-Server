@@ -10,6 +10,13 @@ import json
 json_serializer = serializers.get_serializer('json')()
 
 @require_GET
+def comunas(request):
+	comunas = [str(comuna.name) for comuna in Comuna.objects.all()]
+	return HttpResponse(
+			json.dumps(comunas), 
+			content_type="application/json"
+		)
+@require_GET
 def chefs(request):
 	comuna = request.GET['comuna']
 	chef_list = Chef.objects.filter(comunas__name__contains=comuna)

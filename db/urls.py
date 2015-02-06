@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^data/chefs/$', data_views.chefs, name='data_chefs'),
     url(r'^data/dates/$', data_views.dates, name='data_dates'),
     url(r'^data/menus/$', data_views.menus, name='data_menus'),
+    url(r'^data/comunas/$', data_views.comunas, name='data_comunas'),
     url(r'^(?P<chefid>[0-9]+)/menus/$', views.menus, name='menus'),
     url(r'^createPayment/$', views.pay_khipu, name='pay_khipu'),
     url(r'^successfulPayment/$', views.sucsessful_payment, name='sucsessful_payment'),
