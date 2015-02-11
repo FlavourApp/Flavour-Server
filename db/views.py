@@ -50,7 +50,7 @@ def pay_khipu(request):
 			date 		= '2014-10-10',
 			status 		= 'unverified',
 			username 	= username,
-			useradress 	= useradress,
+			useradress 	= useraddress,
 			userphone 	= userphone,
 
 		)
