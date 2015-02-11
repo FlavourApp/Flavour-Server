@@ -65,7 +65,7 @@ def pay_khipu(request):
 		('receiver_id' 		, my_reciever_id),
 		('subject' 			, 'Compra en Flavour'),
 		('body' 			, str(body)),
-		('amount' 			, str(reserva.menu.precio)), 
+		('amount' 			, str(reserva.menu.precio * reserva.cantidad)), 
 		('payer_email' 		, usermail),
 		('bank_id' 			, ''),
 		('expires_date' 	, ''),
@@ -125,7 +125,7 @@ def sucsessful_payment(request):
 		msg += "Los detalles de su pedido son:\nChef: {}\nMenu: {}\nPrecio: {}\nFecha: {}".format(
 				reserva.chef.name + " " + reserva.chef.lastname,
 				reserva.menu.name,
-				'$'+ str(reserva.menu.precio),
+				'$'+ str(reserva.menu.precio * reserva.cantidad),
 				reserva.date
 			)
 
