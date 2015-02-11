@@ -34,16 +34,25 @@ def pay_khipu(request):
 	#parametros POST: chefID, menu, date, usermail
 	chefId 		= request.POST.get('chefId')
 	menuId 		= request.POST.get('menuId')
+	cantidad 	= request.POST.get('cantidad')
 	dateId 		= request.POST.get('dateId')
-	usermail 	= request.POST.get('payer_email')
+	usermail 	= request.POST.get('payerEmail')
+	username 	= request.POST.get('userMail')
+	useraddress 	= request.POST.get('userAdress')
+	userphone 	= request.POST.get('userPhone')
 	body 		= Menu.objects.get(pk=menuId).description
 
 	reserva = Reserva(
 			chef 		= Chef.objects.get(pk=chefId),
 			usermail 	= usermail,
 			menu 		= Menu.objects.get(pk=menuId),
+			cantidad 	= cantidad
 			date 		= '2014-10-10',
 			status 		= 'unverified'
+			username 	= username,
+			useradress 	= useradress,
+			userphone 	= userphone,
+
 		)
 
 	#reserva.status 		= 'Unverified'
@@ -111,6 +120,7 @@ def sucsessful_payment(request):
 					
 		reserva.status = 'verified'
 
+		#mail al usuario
 		msg = "Hola, muchas gracias por usar FlavourApp.\n"
 		msg += "Los detalles de su pedido son:\nChef: {}\nMenu: {}\nPrecio: {}\nFecha: {}".format(
 				reserva.chef.name + " " + reserva.chef.lastname,
@@ -118,7 +128,6 @@ def sucsessful_payment(request):
 				'$'+ str(reserva.menu.precio),
 				reserva.date
 			)
-
 
 		send_mail(
 			'flavourapp', 
@@ -128,13 +137,33 @@ def sucsessful_payment(request):
 			fail_silently=False
 		)
 
+		#mail al chef
+
+		msg = "Estimado {}, le informamos que se ha realizado un pedido para el dia {} del menu {} para {} personas.\nLos datos de contacto son los siguientes:\nNombre: {}\n Telefono: {}\n direccion: {}\n Mail: {}".format(
+				reserva.chef.name + " " + reserva.chef.lastname,
+				str(reserva.date),
+				reserva.menu.name,
+				reserva.cantidad,
+				reserva.username,
+				reserva.userPhone,
+				reserva.useraddress,
+				reserva.usermail,
+			)
+
+		send_mail(
+			'flavourapp', 
+			msg, 
+			'flavourapp@gmail.com',
+			(reserva.chef.email,), 
+			fail_silently=False
+		)
+
+
 		return HttpResponse(
 		json.dumps(
 			[]
 		), 
-		content_type="application/json")
-
-		
+		content_type="application/json")		
 
 	return HttpResponse(
 			json.dumps(

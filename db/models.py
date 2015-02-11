@@ -55,6 +55,7 @@ class Menu(models.Model):
 	preparationTime = models.IntegerField(default=0)
 	picture 		= models.ImageField(max_length=200, default='')
 	chef 			= models.ForeignKey(Chef)
+	tipo 			= models.CharField(max_length=200, default='')
 
 	def __unicode__(self):
 		return "${} | {}".format(self.precio, self.description)
@@ -73,8 +74,13 @@ class Reserva(models.Model):
 	chef 		= models.ForeignKey(Chef)
 	usermail 	= models.CharField(max_length=60)
 	menu 		= models.ForeignKey(Menu)
+	cantidad 	= models.IntegerField(default= 1)
 	date 		= models.DateField()
 	status 		= models.CharField(max_length=60)
+	username 	= models.CharField(max_length=60)
+	useraddress 	= models.CharField(max_length=60)
+	userphone 	= models.CharField(max_length=60)
+
 
 	def __unicode__(self):
 		return "chef: {}, menu: {}, date: {}".format(
