@@ -46,9 +46,9 @@ def pay_khipu(request):
 			chef 		= Chef.objects.get(pk=chefId),
 			usermail 	= usermail,
 			menu 		= Menu.objects.get(pk=menuId),
-			cantidad 	= cantidad
+			cantidad 	= cantidad,
 			date 		= '2014-10-10',
-			status 		= 'unverified'
+			status 		= 'unverified',
 			username 	= username,
 			useradress 	= useradress,
 			userphone 	= userphone,
