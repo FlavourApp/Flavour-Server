@@ -13,6 +13,7 @@ import hashlib
 import hmac
 import json
 json_serializer = serializers.get_serializer('json')()
+import sys
 
 my_reciever_id = '23003'
 secret = '9fa9cc61f7455f4ba3345bd7719ebe5cc9afc0e5' 
@@ -86,7 +87,7 @@ def pay_khipu(request):
 	data = dict(parameters)
 	req = requests.post(url, data=data)
 	if req.text:
-		print req.text
+		print >>sys.stderr, req.text
 		#enviamos el parametro mobile-url al cliente
 		mobile_url =req.json()['mobile-url']
 		return HttpResponse(
