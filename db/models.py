@@ -62,7 +62,7 @@ class Menu(models.Model):
 
 class Date(models.Model):
 	chef = models.ForeignKey(Chef) 
-	date = models.DateField(default = '')
+	date = models.DateField(default = "2015-10-10")
 
 	def __unicode__(self):
 		return "Chef: {} Fecha: {}".format(
