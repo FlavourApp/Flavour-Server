@@ -75,7 +75,7 @@ class Reserva(models.Model):
 	usermail 	= models.CharField(max_length=60)
 	menu 		= models.ForeignKey(Menu)
 	cantidad 	= models.IntegerField(default= 1)
-	date 		= models.DateField()
+	date 		= models.DateField(default= "2015-10-10")
 	status 		= models.CharField(max_length=60)
 	username 	= models.CharField(max_length=60)
 	useraddress 	= models.CharField(max_length=60)
