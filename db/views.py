@@ -38,7 +38,7 @@ def pay_khipu(request):
 	dateId 		= request.POST.get('dateId')
 	usermail 	= request.POST.get('payerEmail')
 	username 	= request.POST.get('userMail')
-	useraddress 	= request.POST.get('userAdress')
+	useraddress 	= request.POST.get('userAddress')
 	userphone 	= request.POST.get('userPhone')
 	body 		= Menu.objects.get(pk=menuId).description
 
@@ -50,7 +50,7 @@ def pay_khipu(request):
 			date 		= '2014-10-10',
 			status 		= 'unverified',
 			username 	= username,
-			useradress 	= useraddress,
+			useraddress 	= useraddress,
 			userphone 	= userphone,
 
 		)
