@@ -66,7 +66,7 @@ def pay_khipu(request):
 		('receiver_id' 		, my_reciever_id),
 		('subject' 			, 'Compra en Flavour'),
 		('body' 			, str(body)),
-		('amount' 			, str(reserva.menu.precio * reserva.cantidad)), 
+		('amount' 			, str(int(reserva.menu.precio) * int(reserva.cantidad))), 
 		('payer_email' 		, usermail),
 		('bank_id' 			, ''),
 		('expires_date' 	, ''),
@@ -87,7 +87,7 @@ def pay_khipu(request):
 	data = dict(parameters)
 	req = requests.post(url, data=data)
 	if req.text:
-		return HttpResponse(req.text)
+		return HttpResponse(str(reserva.menu.cantidad) + ' ' + str(reserva.menu.precio) + req.text)
 		print >>sys.stderr, req.text
 		#enviamos el parametro mobile-url al cliente
 		mobile_url =req.json()['mobile-url']
