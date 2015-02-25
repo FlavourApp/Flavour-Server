@@ -88,8 +88,8 @@ def pay_khipu(request):
 	data = dict(parameters)
 	req = requests.post(url, data=data)
 	if req.text:
-		return HttpResponse(str(reserva.cantidad) + ' ' + str(reserva.menu.precio) + req.text)
-		print >>sys.stderr, req.text
+		#return HttpResponse(str(reserva.cantidad) + ' ' + str(reserva.menu.precio) + req.text)
+		#print >>sys.stderr, req.text
 		#enviamos el parametro mobile-url al cliente
 		mobile_url =req.json()['mobile-url']
 		return HttpResponse(
