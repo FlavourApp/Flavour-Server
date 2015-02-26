@@ -91,7 +91,7 @@ def pay_khipu(request):
 	req = requests.post(url, data=data)
 	if req.text:
 		print request.POST
-		return HttpResponse(str(request.POST))
+		#return HttpResponse(str(request.POST))
 		#return HttpResponse(str(amount) + ' ' + req.text)
 		#enviamos el parametro mobile-url al cliente
 		mobile_url =req.json()['mobile-url']
