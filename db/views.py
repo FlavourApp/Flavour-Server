@@ -62,12 +62,14 @@ def pay_khipu(request):
 	#hacemos llamada a khipu
 	url = 'https://khipu.com/api/1.3/createPaymentURL'
 	#parametros
+
+	amount = str(int(reserva.cantidad)* int(reserva.menu.precio))
 	parameters = [
 		('receiver_id' 		, my_reciever_id),
 		('subject' 			, 'Compra en Flavour'),
 		('body' 			, str(body)),
 		#('amount' 			, str(int(reserva.menu.precio) * int(reserva.cantidad))), 
-		('amount', '100'),
+		('amount'		, amount),
 		('payer_email' 		, usermail),
 		('bank_id' 			, ''),
 		('expires_date' 	, ''),
@@ -88,8 +90,9 @@ def pay_khipu(request):
 	data = dict(parameters)
 	req = requests.post(url, data=data)
 	if req.text:
-		return HttpResponse(str(reserva.cantidad) + ' ' + str(reserva.menu.precio) + req.text)
-		#print >>sys.stderr, req.text
+		print request.POST
+		return HttpResponse(str(request.POST))
+		#return HttpResponse(str(amount) + ' ' + req.text)
 		#enviamos el parametro mobile-url al cliente
 		mobile_url =req.json()['mobile-url']
 		return HttpResponse(
