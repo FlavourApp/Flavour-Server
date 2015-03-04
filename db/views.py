@@ -123,7 +123,7 @@ def sucsessful_payment(request):
 				pk 	= request.POST['transaction_id'],
 			)
 	#if req.text == 'VERIFIED' and reserva.status == 'unverified' and request.POST['receiver_id'] == my_reciever_id:
-	if true:	#una vez verificado procedemos a realizar la reserva en el sistema
+	if True:	#una vez verificado procedemos a realizar la reserva en el sistema
 					
 		reserva.status = 'verified'
 
