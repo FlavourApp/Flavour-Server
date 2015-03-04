@@ -38,7 +38,7 @@ def pay_khipu(request):
 	cantidad 	= request.POST.get('cantidad')
 	dateId 		= request.POST.get('dateId')
 	usermail 	= request.POST.get('payerEmail')
-	username 	= request.POST.get('userMail')
+	username 	= request.POST.get('userName')
 	useraddress 	= request.POST.get('userAddress')
 	userphone 	= request.POST.get('userPhone')
 	body 		= Menu.objects.get(pk=menuId).description
@@ -75,7 +75,7 @@ def pay_khipu(request):
 		('expires_date' 	, ''),
 		('transaction_id' 	, str(reserva.pk)),
 		('custom' 			, ''),
-		('notify_url' 		, 'http://186.107.112.246:8001/successfulPayment/'),
+		('notify_url' 		, 'http://54.69.134.41:80/successfulPayment/'),
 		('return_url' 		, 'flavour://success.flavour.com'),
 		('cancel_url' 		, 'flavour://failure.flavour.com'),
 		('picture_url' 		, ''),
