@@ -152,7 +152,7 @@ def sucsessful_payment(request):
 				reserva.menu.name,
 				reserva.cantidad,
 				reserva.username,
-				reserva.userPhone,
+				reserva.userphone,
 				reserva.useraddress,
 				reserva.usermail,
 			)
