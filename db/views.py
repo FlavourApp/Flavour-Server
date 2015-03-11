@@ -18,6 +18,16 @@ import sys
 my_reciever_id = '23003'
 secret = '9fa9cc61f7455f4ba3345bd7719ebe5cc9afc0e5' 
 
+def emailtest(request):
+	msg = "Este es un mensaje de prueba"
+	send_mail(
+			'flavourapp', 
+			msg, 
+			'flavourapp@gmail.com',
+			('ro3rto@gmail.com',), 
+			fail_silently=False
+		)
+
 @require_POST
 def home(request):
 	form = ComunaForm(request.POST)
