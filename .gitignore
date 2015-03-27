@@ -1,0 +1,9 @@
+
+/db/migrations/*
+/Flavour/settings.py
+#python compiled
+*.pyc
+*.jpg
+
+
+
