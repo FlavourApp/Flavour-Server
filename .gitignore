@@ -1,2 +1,6 @@
+db/migrations/
 #python compiled
 *.pyc
+*.jpg
+
+

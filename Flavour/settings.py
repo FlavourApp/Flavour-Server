@@ -84,7 +84,7 @@ EMAIL_HOST_PASSWORD = 'flavourappmail'
 
 MEDIA_ROOT = os.path.join(SITE_ROOT,'media/')
 MEDIA_URL = '/media/'
-
+#STATIC_ROOT = os.path.join(SITE_ROOT,'static/')
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -98,5 +98,9 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
-
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(SITE_ROOT,'static/')
+STATICFILES_DIRS = (
+	os.path.join(SITE_ROOT, STATIC_ROOT)
+)
+

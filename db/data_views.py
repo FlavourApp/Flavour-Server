@@ -5,6 +5,8 @@ from django.core import serializers
 from django.views.decorators.http import *
 from forms import *
 from db.models import *
+from datetime import datetime as dt
+from datetime import timedelta
 
 import json
 json_serializer = serializers.get_serializer('json')()
@@ -27,7 +29,7 @@ def chefs(request):
 @require_GET
 def dates(request):
 	pk = request.GET['chefId']	
-	dates = Date.objects.filter(chef__pk=pk)
+	dates = Date.objects.filter(chef__pk=pk, date > dt.now + timedelta(days=1))
 	return HttpResponse(json_serializer.serialize(dates), content_type="application/json")
 
 @require_GET
