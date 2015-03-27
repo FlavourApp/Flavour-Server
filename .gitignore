@@ -1,8 +1,8 @@
 
-db/migrations/
+/*
 #python compiled
 *.pyc
 *.jpg
-Flavour\settings.py
+
 
 
