@@ -19,6 +19,7 @@ class Chef(models.Model):
 	email 		= models.EmailField(max_length=60)
 	phone 		= models.CharField(max_length=12)
 	picture 	= models.ImageField(default = '')
+	picture2 	= models.ImageField(default = '')
 	description = models.CharField(max_length=200, default='')
 	comunas 	= models.ManyToManyField(Comuna)
 	bio 		= models.CharField(default= '',max_length=255)
@@ -54,6 +55,8 @@ class Menu(models.Model):
 	precio 			= models.IntegerField(default=0)
 	preparationTime = models.IntegerField(default=0)
 	picture 		= models.ImageField(max_length=200, default='')
+	picture2		= models.ImageField(max_length=200, default='')
+	picture3		= models.ImageField(max_length=200, default='')
 	chef 			= models.ForeignKey(Chef)
 	tipo 			= models.CharField(max_length=200, default='')
 
