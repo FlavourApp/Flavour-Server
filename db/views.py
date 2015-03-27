@@ -24,7 +24,7 @@ def emailtest(request):
 			'flavourapp', 
 			msg, 
 			'flavourapp@gmail.com',
-			('ro3rto@gmail.com',), 
+			('ro3rto@gmail.com','demianschkolnik@gmail.com'), 
 			fail_silently=False
 		)
 

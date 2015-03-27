@@ -66,7 +66,7 @@ class Migration(migrations.Migration):
             name='Date',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('date', models.DateField(default=b'')),
+                ('date', models.DateField(default=b'2015-10-10')),
                 ('chef', models.ForeignKey(to='db.Chef')),
             ],
             options={
@@ -82,6 +82,7 @@ class Migration(migrations.Migration):
                 ('precio', models.IntegerField(default=0)),
                 ('preparationTime', models.IntegerField(default=0)),
                 ('picture', models.ImageField(default=b'', max_length=200, upload_to=b'')),
+                ('tipo', models.CharField(default=b'', max_length=200)),
                 ('chef', models.ForeignKey(to='db.Chef')),
             ],
             options={
@@ -104,11 +105,12 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('usermail', models.CharField(max_length=60)),
-                ('date', models.DateField()),
-                ('status', models.CharField(max_length=200)),
-                ('custom', models.CharField(max_length=200)),
-                ('subject', models.CharField(max_length=200)),
-                ('amount', models.IntegerField()),
+                ('cantidad', models.IntegerField(default=1)),
+                ('date', models.DateField(default=b'2015-10-10')),
+                ('status', models.CharField(max_length=60)),
+                ('username', models.CharField(max_length=60)),
+                ('useraddress', models.CharField(max_length=60)),
+                ('userphone', models.CharField(max_length=60)),
                 ('chef', models.ForeignKey(to='db.Chef')),
                 ('menu', models.ForeignKey(to='db.Menu')),
             ],
