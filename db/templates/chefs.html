@@ -1,0 +1,6 @@
+{%for chef in chefs%}
+	<div>
+		<a href={%url 'menus' chef.pk%}> {{chef.name}}</a>
+		<img src="{{chef.picture.url}}"/>
+	</div>
+{%endfor%}
