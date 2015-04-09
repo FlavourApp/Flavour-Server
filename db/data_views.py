@@ -29,7 +29,7 @@ def chefs(request):
 @require_GET
 def dates(request):
 	pk = request.GET['chefId']	
-	dates = Date.objects.filter(chef__pk=pk, date > dt.now + timedelta(days=1))
+	dates = Date.objects.filter(chef__pk=pk, date__gt=(dt.now() + timedelta(days=1)))
 	return HttpResponse(json_serializer.serialize(dates), content_type="application/json")
 
 @require_GET
