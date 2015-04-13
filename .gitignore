@@ -2,6 +2,7 @@
 /db/migrations/*
 /Flavour/settings.py
 /media/*
+/static_root/*
 #python compiled
 *.pyc
 *.jpg
