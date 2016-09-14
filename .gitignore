@@ -6,6 +6,7 @@
 #python compiled
 *.pyc
 *.jpg
+*.sqlite3
 
 
 
